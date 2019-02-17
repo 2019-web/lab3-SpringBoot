@@ -1,8 +1,7 @@
 # 高级Web技术 Lab 2：Spring Boot 与 MyBatis
 
-2017.6
+2019.3
 
-[TOC]
 
 # Part 1: Spring Boot
 
