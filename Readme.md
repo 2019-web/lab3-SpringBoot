@@ -1,6 +1,4 @@
-# 高级Web技术 Lab 2：Spring Boot 与 MyBatis
-
-2019.3
+# 高级Web技术 Lab 3：Spring Boot 与 MyBatis
 
 
 # Part 1: Spring Boot
@@ -11,7 +9,7 @@
 
 - JavaScript，运行于 Node.js 环境，有 Express，Restify 等框架
 - Java，有 Spring Boot 等框架
-- Python，有 web.py 等框架
+- Python，有Django, Flask 等框架
 - Ruby，有 Sinatra 等框架
 - PHP，有 Laravel 等框架
 
@@ -23,7 +21,7 @@
 
 ### JDK 与 JRE
 
-没有 Java 环境的电脑需要同学们去安装 JDK 与 JRE，推荐 1.8 版本。
+没有 Java 环境的电脑需要同学们去安装 JDK 与 JRE
 
 ### Maven
 
@@ -31,13 +29,13 @@ Maven 是 Java 的库管理工具，其功能与 npm 比较类似。
 
 如果不安装 Maven，我们也可以通过手动将 Jar 包放到程序的 classpath 中来添加依赖文件，就像前端也可以手动下载 js 库并添加至页面中一样。但是这样的方式不利于管理依赖文件，因此推荐使用 Maven。
 
-下载 Maven: http://maven.apache.org/download.cgi 或解压 Lab 目录中的 `apache-maven-3.5.0-bin.zip`
+下载 Maven: http://maven.apache.org/download.cgi 或解压 Lab 目录中的 `apache-maven-3.6.1-bin.zip`
 
 安装 Maven: http://maven.apache.org/install.html
 
 ## 新建 Spring Boot 工程
 
-同学们可以使用 Lab 目录中的 lab2-seed 工程，或者自己新建 Spring Boot 工程。注意新建工程时修改 `pom.xml` 中的 `groupId` 和 `artifactId`。
+同学们新建 Spring Boot 工程。注意新建工程时修改 `pom.xml` 中的 `groupId` 和 `artifactId`。
 
 新建 Spring Boot 工程参考官方教程：https://spring.io/guides/gs/spring-boot/。按此教程新建完工程后，在 IntelliJ 中打开要选择 `Import Project` 或者菜单栏中的 `File - Project from Existing Source`， 并在其中选择 Maven 类型。
 
@@ -47,12 +45,12 @@ Maven 是 Java 的库管理工具，其功能与 npm 比较类似。
 
 ## 运行 Spring Boot
 
-以 Lab 目录中的 lab2-seed 工程为例，`Application.java` 为工程的入口，运行此类便可运行我们的 Spring Boot 工程。
+ 工程目录中的 `Application.java` 为工程的入口，运行此类便可运行我们的 Spring Boot 工程。
 
 代码如下：
 
 ```java
-package adweb.lab2;
+package adweb.lab3;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -67,10 +65,10 @@ public class Application {
 
 `SpringApplication.run(Application.class, args);` 一行运行了我们的 Spring 工程。Spring Boot 会搜索工程中所有的 Controller，并注册对应的接口。然后 Spring Boot 会运行内置的 Tomcat 服务器来提供服务。
 
-在 lab2 工程中已经包含一个接口，查看 `controller/HelloController.java` 文件：
+在 lab3 工程中已经包含一个接口，查看 `controller/HelloController.java` 文件：
 
 ```java
-package adweb.lab2.controller;
+package adweb.lab3.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,7 +112,7 @@ public class HelloController {
 首先为返回的 JSON 对象创建对应的 Bean 类，新建 `response` 包并新建 `GreetingResponse`，代码如下：
 
 ```java
-package adweb.lab2.response;
+package adweb.lab3.response;
 
 public class GreetingResponse {
     private final long id;
@@ -224,7 +222,7 @@ public @ResponseBody GreetingResponse greeting(@RequestParam(value = "name") Str
 我们对应新建一个 `UserRegisterRequest.java` ：
 
 ```java
-package adweb.lab2.request;
+package adweb.lab3.request;
 
 public class UserRegisterRequest {
     private String username;
@@ -345,13 +343,13 @@ MyBatis 支持各种数据库，本次 Lab 中以 MySQL 为例。
 <dependency>
   <groupId>org.mybatis</groupId>
   <artifactId>mybatis</artifactId>
-  <version>3.4.4</version>
+  <version>3.4.6</version>
 </dependency>
 
 <dependency>
   <groupId>mysql</groupId>
   <artifactId>mysql-connector-java</artifactId>
-  <version>6.0.6</version>
+  <version>8.0.13</version>
 </dependency>
 ```
 
@@ -369,13 +367,7 @@ MyBatis 的官方文档将 MyBatis 的各方面阐述得很清楚，本 Lab 中�
 
 ## 样例代码
 
-> 加入了 MyBatis 的样例代码在 lab2-half 工程中。同学们可以直接打开查看。
-
 我们接着上文中 Spring Boot 创建的工程，将 MyBatis 加入进来。
-
-最终的工程目录结构如图所示：
-
- ![Screen Shot 2017-06-03 at 2.09.42 AM](https://cloud.githubusercontent.com/assets/6532225/26740141/f9a59296-4806-11e7-9c40-666c02a1acb0.png)
 
 1. 创建 MyBatis 核心配置文件 `SqlMapConfig.xml`：
 
@@ -409,13 +401,13 @@ MyBatis 的官方文档将 MyBatis 的各方面阐述得很清楚，本 Lab 中�
 
 ```
 driver=com.mysql.jdbc.Driver
-url=jdbc:mysql://localhost:3306/adweb_lab2?characterEncoding=utf-8
+url=jdbc:mysql://localhost:3306/adweb_lab3?characterEncoding=utf-8
 username=root
 password=123456
 ```
 
-3. 对应地，在 MySQL 中创建新的 Schema `adweb-lab2`。
-4. 使用 `lab2.sql` 创建表：
+3. 对应地，在 MySQL 中创建新的 Schema `adweb-lab3`。
+4. 使用 `lab3.sql` 创建表：
 
 ```sql
 DROP TABLE IF EXISTS Article;
@@ -432,8 +424,8 @@ CREATE TABLE IF NOT EXISTS User (
 
 INSERT INTO User (userID, username, password, email, phone) VALUES
   (1, 'kaiyudai', '12345678', 'kydai@fudan.edu.cn', '13666666666'),
-  (2, 'fengshuangli', '12345678', '13302010002@fudan.edu.cn', '13888888888'),
-  (3, 'zhongyitong', '12345678', NULL, NULL);
+  (2, 'fanliu', '12345678', 'liufan@fudan.edu.cn', '13888888888'),
+  (3, 'xingyuzhang', '12345678', NULL, NULL);
 
 CREATE TABLE IF NOT EXISTS Article (
   articleID INT(11) NOT NULL AUTO_INCREMENT,
@@ -448,7 +440,7 @@ CREATE TABLE IF NOT EXISTS Article (
 5. 新建 `SqlSessionLoader.java` 来载入 MyBatis：
 
 ```java
-package adweb.lab2.mybatis;
+package adweb.lab3.mybatis;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -482,7 +474,7 @@ public class SqlSessionLoader {
 ```xml
 <resources>
   <resource>
-    <directory>src/main/java/adweb/lab2/mybatis/config</directory>
+    <directory>src/main/java/adweb/lab3/mybatis/config</directory>
     <includes>
       <include>**/*.xml</include>
       <include>**/*.properties</include>
@@ -499,17 +491,17 @@ public class SqlSessionLoader {
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="adweb.lab2.UserMapper">
+<mapper namespace="adweb.lab3.UserMapper">
 
-  <select id="findUserById" parameterType="int" resultType="adweb.lab2.mybatis.po.User">
+  <select id="findUserById" parameterType="int" resultType="adweb.lab3.mybatis.po.User">
     select * from User where userID = #{userID}
   </select>
 
-  <select id="findUserByUsername" parameterType="java.lang.String" resultType="adweb.lab2.mybatis.po.User">
+  <select id="findUserByUsername" parameterType="java.lang.String" resultType="adweb.lab3.mybatis.po.User">
     select * from User where username = #{username}
   </select>
 
-  <insert id="addUser" parameterType="adweb.lab2.mybatis.po.User" useGeneratedKeys="true" keyProperty="userID">
+  <insert id="addUser" parameterType="adweb.lab3.mybatis.po.User" useGeneratedKeys="true" keyProperty="userID">
     insert into User (username, password, email, phone)
     values (#{username}, #{password}, #{email}, #{phone})
   </insert>
@@ -522,7 +514,7 @@ Mapper 是 MyBatis 核心功能，注意仔细阅读相关文档，理解 Mapper
 8. 创建 Plain Object `User.java`：
 
 ```java
-package adweb.lab2.mybatis.po;
+package adweb.lab3.mybatis.po;
 
 public class User {
     private int userID;
@@ -565,12 +557,12 @@ public class User {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public @ResponseBody Object register(@RequestBody UserRegisterRequest request) throws IOException {
         SqlSession sqlSession = SqlSessionLoader.getSqlSession();
-        User user = sqlSession.selectOne("adweb.lab2.UserMapper.findUserByUsername", request.getUsername());
+        User user = sqlSession.selectOne("adweb.lab3.UserMapper.findUserByUsername", request.getUsername());
         if (user != null) {
             sqlSession.close();
             return new ErrorResponse("The username is already used");
         } else {
-            sqlSession.insert("adweb.lab2.UserMapper.addUser", new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getPhone()));
+            sqlSession.insert("adweb.lab3.UserMapper.addUser", new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getPhone()));
             sqlSession.commit();
             sqlSession.close();
             return new UserResponse("abc"); // use your generated token here.
@@ -588,5 +580,9 @@ public class User {
 
 仍有剩余时间的同学可以尝试添加用户身份认证相关代码，继续学习 Spring Boot 和 MyBatis 或将 Lab 所学内容运用于 PJ 中。
 
-本练习不需要提交。
+# Part 3. 提交
+
+截止时间:2018-6-10 23:59:59 提交⽅式:将项目部署到云上，将云地址写在⼀份文档里，⽂档里也可以简要介绍下lab过程中遇到的问题收获以及你新添加的功能(可选)，将该⽂档提交到超星指定的lab作业栏⾥。
+
+任何问题，欢迎随时联系TA email: 15307110273@fudan.edu.edu 
 
