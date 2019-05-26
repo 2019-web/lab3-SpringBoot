@@ -35,13 +35,11 @@ Maven 是 Java 的库管理工具，其功能与 npm 比较类似。
 
 ## 新建 Spring Boot 工程
 
-同学们新建 Spring Boot 工程。注意新建工程时修改 `pom.xml` 中的 `groupId` 和 `artifactId`。
-
-新建 Spring Boot 工程参考官方教程：https://spring.io/guides/gs/spring-boot/。按此教程新建完工程后，在 IntelliJ 中打开要选择 `Import Project` 或者菜单栏中的 `File - Project from Existing Source`， 并在其中选择 Maven 类型。
+新建 Spring Boot 工程参考官方教程：https://spring.io/guides/gs/spring-boot/。
 
 使用 IntelliJ IDEA Ultimate 版本的同学新建工程时也可以参考：https://www.jetbrains.com/help/idea/creating-spring-boot-projects.html
 
-搭建完 Spring Boot 工程后，首先运行 `maven install` 安装所需依赖。
+搭建完 Spring Boot 工程后，首先运行 `mvn install` 安装所需依赖。
 
 ## 运行 Spring Boot
 
@@ -50,7 +48,7 @@ Maven 是 Java 的库管理工具，其功能与 npm 比较类似。
 代码如下：
 
 ```java
-package adweb.lab3;
+package hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -65,10 +63,10 @@ public class Application {
 
 `SpringApplication.run(Application.class, args);` 一行运行了我们的 Spring 工程。Spring Boot 会搜索工程中所有的 Controller，并注册对应的接口。然后 Spring Boot 会运行内置的 Tomcat 服务器来提供服务。
 
-在 lab3 工程中已经包含一个接口，查看 `controller/HelloController.java` 文件：
+在 hello 文件夹中已经包含一个接口，查看 `hello/HelloController.java` 文件：
 
 ```java
-package adweb.lab3.controller;
+package hello;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,7 +84,7 @@ public class HelloController {
 
 首先，`@RestController` 这个 Annotation 标记了这个类为 Restful Service 的一个 Controller，这是每个 Controller 在类名前必须加的 Annotation。
 
-`@RequestMapping("/hello")` 表示 `index` 这个方法注册了 `/hello` 这个 path，可以通过在浏览器中打开 `http://localhost:8080/hello` 来访问这个接口。接口的 HTTP method 默认为 `GET` ，其他 method 会在后面讲述。
+`@RequestMapping("/")` 表示 `index` 这个方法注册了 `/` 这个 path，可以通过在浏览器中打开 `http://localhost:8080/` 来访问这个接口。接口的 HTTP method 默认为 `GET` ，其他 method 会在后面讲述。
 
 > 注意，这个接口返回的只是一个 String，不是 JSON，所以这个接口并不是一个符合 Restful 标准的接口。在写代码时要避免出现这种不标准的情况。
 
@@ -112,7 +110,7 @@ public class HelloController {
 首先为返回的 JSON 对象创建对应的 Bean 类，新建 `response` 包并新建 `GreetingResponse`，代码如下：
 
 ```java
-package adweb.lab3.response;
+package hello.response;
 
 public class GreetingResponse {
     private final long id;
@@ -159,6 +157,15 @@ public @ResponseBody GreetingResponse greeting(@RequestParam(value = "name", def
 方法参数`@RequestParam(value = "name", defaultValue = "World") String name` 中，首先参数是 `String name`，`@RequestParam` 指定了这个参数是在 URL 的 path 上的一个参数，而非在 header 中或者 body 中。 `value = "name"` 指定了这个变量对应 path 上的 `name` 参数。`defaultValue = "World"` 表示如果没有 `name` 参数，则将变量的值赋值为 `World`。
 
 函数内部可以自由编写，最后返回一个 GreetingResponse 对象即可。
+
+完成后重新加载服务器，通过curl可以测试该接口
+
+```shell
+curl localhost:8080/greeting?name="xingyu" 
+{"id":1,"name":"Hello, xingyu!"}
+```
+
+
 
 ## 支持跨域访问
 
@@ -222,7 +229,7 @@ public @ResponseBody GreetingResponse greeting(@RequestParam(value = "name") Str
 我们对应新建一个 `UserRegisterRequest.java` ：
 
 ```java
-package adweb.lab3.request;
+package hello.request;
 
 public class UserRegisterRequest {
     private String username;
@@ -353,7 +360,7 @@ MyBatis 支持各种数据库，本次 Lab 中以 MySQL 为例。
 </dependency>
 ```
 
-然后运行 `maven install` 安装这两个包。
+然后运行 `mvn install` 安装这两个包。
 
 ## 官方文档
 
@@ -440,7 +447,7 @@ CREATE TABLE IF NOT EXISTS Article (
 5. 新建 `SqlSessionLoader.java` 来载入 MyBatis：
 
 ```java
-package adweb.lab3.mybatis;
+package hello.mybatis;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -474,7 +481,7 @@ public class SqlSessionLoader {
 ```xml
 <resources>
   <resource>
-    <directory>src/main/java/adweb/lab3/mybatis/config</directory>
+    <directory>src/main/java/hello/mybatis/config</directory>
     <includes>
       <include>**/*.xml</include>
       <include>**/*.properties</include>
@@ -491,17 +498,17 @@ public class SqlSessionLoader {
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="adweb.lab3.UserMapper">
+<mapper namespace="hello.UserMapper">
 
-  <select id="findUserById" parameterType="int" resultType="adweb.lab3.mybatis.po.User">
+  <select id="findUserById" parameterType="int" resultType="hello.mybatis.po.User">
     select * from User where userID = #{userID}
   </select>
 
-  <select id="findUserByUsername" parameterType="java.lang.String" resultType="adweb.lab3.mybatis.po.User">
+  <select id="findUserByUsername" parameterType="java.lang.String" resultType="hello.mybatis.po.User">
     select * from User where username = #{username}
   </select>
 
-  <insert id="addUser" parameterType="adweb.lab3.mybatis.po.User" useGeneratedKeys="true" keyProperty="userID">
+  <insert id="addUser" parameterType="hello.mybatis.po.User" useGeneratedKeys="true" keyProperty="userID">
     insert into User (username, password, email, phone)
     values (#{username}, #{password}, #{email}, #{phone})
   </insert>
@@ -514,7 +521,7 @@ Mapper 是 MyBatis 核心功能，注意仔细阅读相关文档，理解 Mapper
 8. 创建 Plain Object `User.java`：
 
 ```java
-package adweb.lab3.mybatis.po;
+package hello.mybatis.po;
 
 public class User {
     private int userID;
@@ -557,12 +564,12 @@ public class User {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public @ResponseBody Object register(@RequestBody UserRegisterRequest request) throws IOException {
         SqlSession sqlSession = SqlSessionLoader.getSqlSession();
-        User user = sqlSession.selectOne("adweb.lab3.UserMapper.findUserByUsername", request.getUsername());
+        User user = sqlSession.selectOne("hello.UserMapper.findUserByUsername", request.getUsername());
         if (user != null) {
             sqlSession.close();
             return new ErrorResponse("The username is already used");
         } else {
-            sqlSession.insert("adweb.lab3.UserMapper.addUser", new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getPhone()));
+            sqlSession.insert("hello.UserMapper.addUser", new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getPhone()));
             sqlSession.commit();
             sqlSession.close();
             return new UserResponse("abc"); // use your generated token here.
