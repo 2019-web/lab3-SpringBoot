@@ -270,10 +270,10 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public @ResponseBody Object register(@RequestBody UserRegisterRequest request){
-      if (/* success */ true) {
-        return new RegisterResponse(/* ... */);
+      if (/* success */ true) { 
+        return new RegisterResponse(/* ... */); //RegisterResponse类请同学们自行定义
       } else {
-        return new ErrorResponse(/* ... */);
+        return new ErrorResponse(/* ... */); //ErrorResponse类请同学们自行定义
       }
     }
 
@@ -433,15 +433,6 @@ INSERT INTO User (userID, username, password, email, phone) VALUES
   (1, 'kaiyudai', '12345678', 'kydai@fudan.edu.cn', '13666666666'),
   (2, 'fanliu', '12345678', 'liufan@fudan.edu.cn', '13888888888'),
   (3, 'xingyuzhang', '12345678', NULL, NULL);
-
-CREATE TABLE IF NOT EXISTS Article (
-  articleID INT(11) NOT NULL AUTO_INCREMENT,
-  userID INT(11) NOT NULL,
-  title VARCHAR(100) NOT NULL,
-  content VARCHAR(5000) NOT NULL,
-  PRIMARY KEY (articleID),
-  FOREIGN KEY (userID) REFERENCES User(userID)
-);
 ```
 
 5. 新建 `SqlSessionLoader.java` 来载入 MyBatis：
@@ -481,7 +472,7 @@ public class SqlSessionLoader {
 ```xml
 <resources>
   <resource>
-    <directory>src/main/java/hello/mybatis/config</directory>
+    <directory>src/main/java/hello/mybatis</directory>
     <includes>
       <include>**/*.xml</include>
       <include>**/*.properties</include>
@@ -491,7 +482,7 @@ public class SqlSessionLoader {
 </resources>
 ```
 
-7. 创建 `UserMapper.xml` 来定义对 User 表的操作映射：
+7. 创建mybatis/mapper目录，在目录下创建 `UserMapper.xml` 来定义对 User 表的操作映射：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -572,7 +563,7 @@ public class User {
             sqlSession.insert("hello.UserMapper.addUser", new User(request.getUsername(), request.getPassword(), request.getEmail(), request.getPhone()));
             sqlSession.commit();
             sqlSession.close();
-            return new UserResponse("abc"); // use your generated token here.
+            return new RegisterResponse("abc"); // use your generated token here.
         }
     }
 ```
@@ -589,7 +580,7 @@ public class User {
 
 # Part 3. 提交
 
-截止时间:2018-6-10 23:59:59 提交⽅式:将项目部署到云上，将云地址写在⼀份文档里，⽂档里也可以简要介绍下lab过程中遇到的问题收获以及你新添加的功能(可选)，将该⽂档提交到超星指定的lab作业栏⾥。
+截止时间:2018-6-10 23:59:59 提交⽅式:将项目部署到云上，将云地址写在⼀份文档里，将注册，用户登录，列举所有用户，接口的url写在文档里（或者做一个简单的可视化页面），⽂档里也可以简要介绍下lab过程中遇到的问题收获以及你新添加的功能(可选，比如可以简要介绍下你所用的身份认证机制)，将该⽂档提交到超星指定的lab作业栏⾥。
 
 任何问题，欢迎随时联系TA email: 15307110273@fudan.edu.edu 
 
